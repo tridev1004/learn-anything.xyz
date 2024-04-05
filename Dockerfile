@@ -14,7 +14,7 @@ WORKDIR /la
 
 # Install bun
 RUN curl -fsSL https://bun.sh/install | bash
-# Add to PATH for setup setp
+# Add to PATH for setup step
 ENV PATH="$PATH:/root/.bun/bin"
 
 # Install edgedb
@@ -26,8 +26,11 @@ ENV PATH="$PATH:/root/.local/bin"
 # Install grafbase
 RUN pnpm add -g grafbase
 
-# Copy package.json and pnpm-lock.yaml
-COPY package.json pnpm-lock.yaml ./
+# Copy pnpm files for installation
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY app/package.json app/
+COPY mobile/package.json mobile/
+COPY website/package.json website/
 
 # Install dependencies. Dependencies will be cached if the package.json and pnpm-lock.yaml files are not changed
 RUN pnpm install
